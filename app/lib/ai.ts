@@ -1,10 +1,8 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Load API key from environment variables
 const apiKey = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
 
-// Configure the AI model with system instructions
 const model = genAI.getGenerativeModel({
   model: "gemini-1.5-flash",
   systemInstruction: `
@@ -58,34 +56,33 @@ Ensure the output **strictly follows this HTML structure**.
   `,
 });
 
-// AI text generation configuration settings
 const generationConfig = {
-  temperature: 0.9, // Controls creativity (higher = more creative)
-  topP: 0.95,       // Ensures diverse word selection
-  topK: 40,         // Limits token selection for improved coherence
-  maxOutputTokens: 8192, // Defines the max word length
-  responseMimeType: "text/plain", // Ensures plain text output
+  temperature: 0.9,
+  topP: 0.95,
+  topK: 40,
+  maxOutputTokens: 8192,
+  responseMimeType: "text/plain",
 };
 
 /**
  * Generates a technology-focused blog post formatted in HTML.
- * @returns {Promise<string>} - The AI-generated blog post.
+ * @returns {Promise<string>}
  */
 async function generateBlog(): Promise<string> {
   try {
-    // Start AI chat session with generation config
+
     const chatSession = model.startChat({ generationConfig });
 
-    // Request blog post generation
     const result = await chatSession.sendMessage("Generate a blog post.");
 
-    // Extract text response
     const blogPost = result.response.text();
 
     return blogPost;
 
   } catch (error) {
+
     console.error("Error generating blog post:", error);
+
     throw new Error("Failed to generate blog post.");
   }
 }

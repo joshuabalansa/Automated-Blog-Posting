@@ -11,6 +11,8 @@ export async function GET() {
       .select("*")
       .gte("created_at", new Date().toISOString().split("T")[0]);
 
+
+
     if (fetchError) {
       console.error("Error fetching blog:", fetchError);
       return NextResponse.json({ error: "Database query failed" }, { status: 500 });
@@ -22,12 +24,13 @@ export async function GET() {
 
     const blogContent = await generateBlog();
 
-    const titleMatch = blogContent.match(/^#?\s*(.+)/m);
+    // Attempt to extract the title from the first h1 tag
+    const titleMatch = blogContent.match(/<h1>(.*?)<\/h1>/i);
     const title = titleMatch ? titleMatch[1].trim() : "Untitled Blog";
 
     const { data, error } = await supabase
       .from("blogs")
-      .insert([{ title, content: blogContent }])
+      .insert([{ title: title || "Untitled", content: blogContent }])
       .select();
 
     if (error) {

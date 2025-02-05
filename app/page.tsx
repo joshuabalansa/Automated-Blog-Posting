@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -39,7 +40,7 @@ export default function Home() {
   return (
     <div className="bg-white py-16">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-  
+
         <div className="text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
             Daily Tech Blog
@@ -75,9 +76,9 @@ export default function Home() {
                   {new Date(post.created_at).toLocaleDateString()}
                 </time>
                 <h4 className="mt-3 text-xl font-semibold text-gray-900 hover:text-blue-600">
-                  <a href={`/blog/${post.id}`}>
+                  <Link href={`/blog/${post.id}`}>
                     {post.title.replace(/<\/?[^>]+(>|$)/g, "")}
-                  </a>
+                  </Link>
                 </h4>
                 <div
                   className="mt-4 text-gray-700"
@@ -85,12 +86,12 @@ export default function Home() {
                     __html: post.content.substring(0, 70),
                   }}
                 />
-                <a
+                <Link
                   href={`/blog/${post.id}`}
                   className="mt-4 inline-block text-blue-600 hover:underline text-sm"
                 >
                   Read More →
-                </a>
+                </Link>
               </article>
             ))
           ) : (
