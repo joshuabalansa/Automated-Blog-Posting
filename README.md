@@ -1,5 +1,3 @@
-# Daily Tech Blog
-## Stay updated with the latest in technology, AI, cybersecurity, and more.
-
-### NextJS + Google Gemini
+# Daily Tech Blog NextJS + Google Gemini
+Stay updated with the latest in technology, AI, cybersecurity, and more.
 
