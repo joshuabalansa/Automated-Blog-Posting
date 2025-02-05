@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -14,14 +15,23 @@ export default function Home() {
         setPosts(data.blogs || []);
       } catch (error) {
         console.error("Error fetching blogs:", error);
+      } finally {
+        setLoading(false);
       }
     }
 
     fetchPosts();
   }, []);
 
+  interface Post {
+    id: string;
+    title: string;
+    content: string;
+    created_at: string;
+  }
+
   const filteredPosts = posts.filter(
-    (post) =>
+    (post: Post) =>
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       post.content.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -29,7 +39,7 @@ export default function Home() {
   return (
     <div className="bg-white py-16">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Header */}
+  
         <div className="text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
             Daily Tech Blog
@@ -50,10 +60,13 @@ export default function Home() {
           />
         </div>
 
-        {/* Blog Posts Grid */}
         <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredPosts.length > 0 ? (
-            filteredPosts.map((post) => (
+          {loading ? (
+            <p className="col-span-full text-center text-gray-500">
+              Getting latest blog posts...
+            </p>
+          ) : filteredPosts.length > 0 ? (
+            filteredPosts.map((post: Post) => (
               <article
                 key={post.id}
                 className="border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition"
@@ -82,7 +95,7 @@ export default function Home() {
             ))
           ) : (
             <p className="col-span-full text-center text-gray-500">
-              Loading...
+              Opps! no blog posts found. Try searching for something else.
             </p>
           )}
         </div>
